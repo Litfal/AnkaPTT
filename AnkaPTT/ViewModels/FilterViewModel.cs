@@ -21,10 +21,11 @@ namespace AnkaPTT.ViewModels
 
 
 
-        public int BeginAt { get; set; }
-        public int Step { get; set; }
-        public int TakeCount { get; set; }
+        public int BeginAt { get; set; } = 1;
+        public int Step { get; set; } = 0;
+        public int TakeCount { get; set; } = 0;
 
+        public int SameTimes { get; set; } = 0;
 
 
         public IEnumerable<PushViewModel> ApplyFilter(IQueryable<PushViewModel> pushes)
@@ -32,6 +33,8 @@ namespace AnkaPTT.ViewModels
             IQueryable<PushViewModel> query = pushes;
 
             // Time filter
+            if (EnabledStartTime)
+                query = query.SkipWhile(p => p.GuessDateTime < StartTime);
 
             // Tag filter
             HashSet<string> tags = new HashSet<string>();
@@ -57,6 +60,26 @@ namespace AnkaPTT.ViewModels
                 }
                 yield return enumerator.Current;
                 for (int i = 0; i < stepSkip; i++)
+                    enumerator.MoveNext();
+            }
+        }
+
+        static IEnumerable<PushViewModel> stepEnumerate(IEnumerable<PushViewModel> query, int step, bool excludeSameId)
+        {
+            var enumerator = query.GetEnumerator();
+            HashSet<string> addedId = new HashSet<string>();
+
+            while (enumerator.MoveNext())
+            {
+                var curr = enumerator.Current;
+                if (excludeSameId)
+                {
+                    if (addedId.Contains(curr.Userid))
+                        continue;
+                    addedId.Add(curr.Userid);
+                }
+                yield return enumerator.Current;
+                for (int i = 0; i < step; i++)
                     enumerator.MoveNext();
             }
         }

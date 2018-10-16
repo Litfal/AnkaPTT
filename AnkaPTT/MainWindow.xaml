@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cef="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         xmlns:local="clr-namespace:AnkaPTT"
+        xmlns:localui="clr-namespace:AnkaPTT.UI"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1280">
     <Window.Resources>
@@ -26,6 +27,14 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+            <Setter Property="Background" Value="{StaticResource CommonBackgroundBrush}" />
+        </Style>
+        <Style TargetType="localui:DateTimeTextBox">
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+            <Setter Property="Background" Value="{StaticResource CommonBackgroundBrush}" />
+        </Style>
+        <Style TargetType="localui:IntTextBox">
             <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
             <Setter Property="Background" Value="{StaticResource CommonBackgroundBrush}" />
         </Style>
@@ -180,12 +189,20 @@
             <WrapPanel>
                 <WrapPanel Margin="5">
                     <CheckBox>開始時間</CheckBox>
-                    <TextBox VerticalContentAlignment="Center" Text="{Binding StartTime,StringFormat=HH:mm}"></TextBox>
+                    <localui:DateTimeTextBox Value="{Binding StartTime, Mode=TwoWay}" />
                 </WrapPanel>
                 <WrapPanel Margin="5">
                     <CheckBox>結束時間</CheckBox>
-                    <TextBox VerticalContentAlignment="Center" Text="00:00"></TextBox>
+                    <localui:DateTimeTextBox Value="{Binding EndTime, Mode=TwoWay}" />
                 </WrapPanel>
+            </WrapPanel>
+            <WrapPanel Margin="5">
+                <TextBlock>第</TextBlock>
+                <localui:IntTextBox Value="{Binding BeginAt, Mode=TwoWay}" MaxValue="9999" MinValue="1" />
+                <TextBlock>個開始, 間隔</TextBlock>
+                <localui:IntTextBox Value="{Binding Step, Mode=TwoWay}" MaxValue="100" MinValue="0" />
+                <TextBlock>個</TextBlock>
+
             </WrapPanel>
             <WrapPanel Margin="5">
                 <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsPush}">推</CheckBox>
@@ -193,16 +210,17 @@
                 <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsArrow}">箭頭</CheckBox>
             </WrapPanel>
             <WrapPanel Margin="5">
-                <TextBlock>第</TextBlock>
-                <TextBox>1</TextBox>
-                <TextBlock>個開始, 間隔</TextBlock>
-                <TextBox>0</TextBox>
-                <TextBlock>個, 取</TextBlock>
-                <TextBox>1</TextBox>
-                <TextBlock>個</TextBlock>
+                <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsArrow}">排除重複的ID</CheckBox>
             </WrapPanel>
             <WrapPanel Margin="5">
-                <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsArrow}">排除重複的ID</CheckBox>
+                <TextBlock>完全相同</TextBlock>
+                <localui:IntTextBox Value="{Binding SameTimes, Mode=TwoWay}" MaxValue="9" MinValue="0" />
+                <TextBlock>次以上</TextBlock>
+            </WrapPanel>
+            <WrapPanel Margin="5">
+                <TextBlock>取</TextBlock>
+                <localui:IntTextBox Value="{Binding TakeCount, Mode=TwoWay}" MinValue="0" MaxValue="9999" />
+                <TextBlock>組結果 (0為所有結果)</TextBlock>
             </WrapPanel>
         </StackPanel>
     </Grid>

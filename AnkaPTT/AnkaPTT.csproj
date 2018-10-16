@@ -95,6 +95,8 @@
     <Compile Include="ObservableObject.cs" />
     <Compile Include="Push.cs" />
     <Compile Include="PushFetcher.cs" />
+    <Compile Include="UI\IntTextBox.cs" />
+    <Compile Include="UI\DateTimeTextBox.cs" />
     <Compile Include="ViewModels\FilterViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PushCollectionViewModel.cs" />
