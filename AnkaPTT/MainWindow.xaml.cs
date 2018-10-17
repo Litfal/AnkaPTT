@@ -33,6 +33,7 @@ namespace AnkaPTT
             viewModel.WebBrowser = wb_main;
             DataContext = viewModel;
             pushFetcher.PushFetched += PushFetcher_PushFetched;
+            Title = $"AnkaPTT {GetType().Assembly.GetName().Version}";
         }
 
         private void PushFetcher_PushFetched(object sender, PushFetchedEventArgs e)
