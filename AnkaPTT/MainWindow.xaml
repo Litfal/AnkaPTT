@@ -9,8 +9,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1280">
     <Window.Resources>
-        <Color x:Key="ControlLightColor">White</Color>
-        <Color x:Key="ForegroundColor">White</Color>
+        <Color x:Key="ForegroundColor">#FFDDDDDD</Color>
         <Color x:Key="BorderMediumColor">#FF888888</Color>
         <Color x:Key="SelectedBackgroundColor">#FF404040</Color>
         <Color x:Key="SelectedUnfocusedColor">#FF404040</Color>
@@ -121,7 +120,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBox Margin="0,0,0,3" Grid.Row="0" x:Name="txt_url" KeyUp="txt_url_KeyUp">
             <!--https://www.ptt.cc/bbs/Test/M.1539602820.A.175.html-->
@@ -130,7 +128,7 @@
         </TextBox>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="650px"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
@@ -139,90 +137,99 @@
             <!--<WebBrowser x:Name="wb_main" Grid.Column="0" Margin="0,0,5,0"></WebBrowser>-->
             <GridSplitter Grid.Column="1" Background="Transparent"                
                           HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="5"/>
-            <ListView Grid.Column="2" Background="Black" ItemsSource="{Binding PushCollection}" MouseDoubleClick="ListView_MouseDoubleClick" >
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="T" Width="25px">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Tag}" HorizontalAlignment="Left" Foreground="{Binding TagBrush}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Id" Width="95px">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Userid}" HorizontalAlignment="Left" Foreground="{StaticResource IdBrush}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="300px">
-                            <GridViewColumn.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="Content" HorizontalAlignment="Left"  />
-                                </DataTemplate>
-                            </GridViewColumn.HeaderTemplate>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Content}" Foreground="{StaticResource ContentBrush}" HorizontalAlignment="Left" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="50px">
-                            <GridViewColumn.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="Time" HorizontalAlignment="Left"  />
-                                </DataTemplate>
-                            </GridViewColumn.HeaderTemplate>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Time}" Foreground="{StaticResource PushDateTimeBrush}" HorizontalAlignment="Right" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Grid>
-        <GridSplitter Grid.Row="1" Background="Transparent"                
+            <Grid Grid.Column="2" >
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <ListView Grid.Row="0" ItemsSource="{Binding PushCollection}" MouseDoubleClick="ListView_MouseDoubleClick" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="T" Width="25px">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Tag}" HorizontalAlignment="Left" Foreground="{Binding TagBrush}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Id" Width="95px">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Userid}" HorizontalAlignment="Left" Foreground="{StaticResource IdBrush}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="300px">
+                                <GridViewColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="Content" HorizontalAlignment="Left"  />
+                                    </DataTemplate>
+                                </GridViewColumn.HeaderTemplate>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Content}" Foreground="{StaticResource ContentBrush}" HorizontalAlignment="Left" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="50px">
+                                <GridViewColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="Time" HorizontalAlignment="Left"  />
+                                    </DataTemplate>
+                                </GridViewColumn.HeaderTemplate>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Time}" Foreground="{StaticResource PushDateTimeBrush}" HorizontalAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <GridSplitter Grid.Row="0" Background="Transparent"                
                           HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="5"/>
-        <StackPanel DataContext="{Binding FilterViewModel}" Grid.Row="2" >
-            <WrapPanel>
-                <WrapPanel Margin="5">
-                    <CheckBox IsChecked="{Binding EnabledStartTime, Mode=TwoWay}">開始時間</CheckBox>
-                    <localui:DateTimeTextBox Value="{Binding StartTime, Mode=TwoWay}" />
-                </WrapPanel>
-                <WrapPanel Margin="5">
-                    <CheckBox IsChecked="{Binding EnabledEndTime, Mode=TwoWay}">結束時間</CheckBox>
-                    <localui:DateTimeTextBox Value="{Binding EndTime, Mode=TwoWay}" />
-                </WrapPanel>
-            </WrapPanel>
-            <WrapPanel Margin="5">
-                <TextBlock>第</TextBlock>
-                <localui:IntTextBox Value="{Binding BeginAt, Mode=TwoWay}" MaxValue="9999" MinValue="1" />
-                <TextBlock>個開始, 間隔</TextBlock>
-                <localui:IntTextBox Value="{Binding Step, Mode=TwoWay}" MaxValue="100" MinValue="0" />
-                <TextBlock>個</TextBlock>
+                <Border Grid.Row="1" BorderThickness="1" BorderBrush="{StaticResource ForegroundBrush}"  >
+                <StackPanel DataContext="{Binding FilterViewModel}" >
+    
+                    <WrapPanel>
+                        <WrapPanel Margin="5">
+                            <CheckBox IsChecked="{Binding EnabledStartTime, Mode=TwoWay}">開始時間</CheckBox>
+                            <localui:DateTimeTextBox Value="{Binding StartTime, Mode=TwoWay}" />
+                        </WrapPanel>
+                        <WrapPanel Margin="5">
+                            <CheckBox IsChecked="{Binding EnabledEndTime, Mode=TwoWay}">結束時間</CheckBox>
+                            <localui:DateTimeTextBox Value="{Binding EndTime, Mode=TwoWay}" />
+                        </WrapPanel>
+                    </WrapPanel>
+                    <WrapPanel Margin="5">
+                        <TextBlock>第</TextBlock>
+                        <localui:IntTextBox Value="{Binding BeginAt, Mode=TwoWay}" MaxValue="9999" MinValue="1" />
+                        <TextBlock>個開始, 間隔</TextBlock>
+                        <localui:IntTextBox Value="{Binding Step, Mode=TwoWay}" MaxValue="100" MinValue="0" />
+                        <TextBlock>個</TextBlock>
 
-            </WrapPanel>
-            <WrapPanel Margin="5">
-                <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsPush}">推</CheckBox>
-                <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsUnlike}">噓</CheckBox>
-                <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsArrow}">箭頭</CheckBox>
-            </WrapPanel>
-            <WrapPanel Margin="5">
-                <CheckBox Margin="0,0,8,0" IsChecked="{Binding ExcludeSameId}">排除重複的ID</CheckBox>
-            </WrapPanel>
-            <WrapPanel Margin="5">
-                <TextBlock>完全相同</TextBlock>
-                <localui:IntTextBox Value="{Binding SameTimes, Mode=TwoWay}" MaxValue="9" MinValue="0" />
-                <TextBlock>次以上 (0與1等同此功能關閉)</TextBlock>
-            </WrapPanel>
-            <WrapPanel Margin="5">
-                <TextBlock>取</TextBlock>
-                <localui:IntTextBox Value="{Binding TakeCount, Mode=TwoWay}" MinValue="0" MaxValue="9999" />
-                <TextBlock>組結果 (0為所有結果)</TextBlock>
-            </WrapPanel>
-        </StackPanel>
+                    </WrapPanel>
+                    <WrapPanel Margin="5">
+                        <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsPush}">推</CheckBox>
+                        <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsUnlike}">噓</CheckBox>
+                        <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsArrow}">箭頭</CheckBox>
+                    </WrapPanel>
+                    <WrapPanel Margin="5">
+                        <CheckBox Margin="0,0,8,0" IsChecked="{Binding ExcludeSameId}">排除重複的ID</CheckBox>
+                    </WrapPanel>
+                    <WrapPanel Margin="5">
+                        <TextBlock>完全相同</TextBlock>
+                        <localui:IntTextBox Value="{Binding SameTimes, Mode=TwoWay}" MaxValue="9" MinValue="0" />
+                        <TextBlock>次以上 (0與1等同此功能關閉)</TextBlock>
+                    </WrapPanel>
+                    <WrapPanel Margin="5">
+                        <TextBlock>取</TextBlock>
+                        <localui:IntTextBox Value="{Binding TakeCount, Mode=TwoWay}" MinValue="0" MaxValue="9999" />
+                        <TextBlock>組結果 (0為所有結果)</TextBlock>
+                    </WrapPanel>
+                </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
