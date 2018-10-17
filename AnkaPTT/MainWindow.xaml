@@ -142,7 +142,7 @@
                     <RowDefinition></RowDefinition>
                     <RowDefinition Height="auto"></RowDefinition>
                 </Grid.RowDefinitions>
-                <ListView Grid.Row="0" ItemsSource="{Binding PushCollection}" MouseDoubleClick="ListView_MouseDoubleClick" >
+                <ListView Grid.Row="0" ItemsSource="{Binding ViewPushCollection}" MouseDoubleClick="ListView_MouseDoubleClick" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="T" Width="25px">
@@ -159,7 +159,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="300px">
+                            <GridViewColumn Width="350px">
                                 <GridViewColumn.HeaderTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="Content" HorizontalAlignment="Left"  />
@@ -189,45 +189,48 @@
                 <GridSplitter Grid.Row="0" Background="Transparent"                
                           HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="5"/>
                 <Border Grid.Row="1" BorderThickness="1" BorderBrush="{StaticResource ForegroundBrush}"  >
-                <StackPanel DataContext="{Binding FilterViewModel}" >
-    
-                    <WrapPanel>
-                        <WrapPanel Margin="5">
-                            <CheckBox IsChecked="{Binding EnabledStartTime, Mode=TwoWay}">開始時間</CheckBox>
-                            <localui:DateTimeTextBox Value="{Binding StartTime, Mode=TwoWay}" />
-                        </WrapPanel>
-                        <WrapPanel Margin="5">
-                            <CheckBox IsChecked="{Binding EnabledEndTime, Mode=TwoWay}">結束時間</CheckBox>
-                            <localui:DateTimeTextBox Value="{Binding EndTime, Mode=TwoWay}" />
-                        </WrapPanel>
-                    </WrapPanel>
-                    <WrapPanel Margin="5">
-                        <TextBlock>第</TextBlock>
-                        <localui:IntTextBox Value="{Binding BeginAt, Mode=TwoWay}" MaxValue="9999" MinValue="1" />
-                        <TextBlock>個開始, 間隔</TextBlock>
-                        <localui:IntTextBox Value="{Binding Step, Mode=TwoWay}" MaxValue="100" MinValue="0" />
-                        <TextBlock>個</TextBlock>
+                    <StackPanel DataContext="{Binding FilterViewModel}" >
 
-                    </WrapPanel>
-                    <WrapPanel Margin="5">
-                        <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsPush}">推</CheckBox>
-                        <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsUnlike}">噓</CheckBox>
-                        <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsArrow}">箭頭</CheckBox>
-                    </WrapPanel>
-                    <WrapPanel Margin="5">
-                        <CheckBox Margin="0,0,8,0" IsChecked="{Binding ExcludeSameId}">排除重複的ID</CheckBox>
-                    </WrapPanel>
-                    <WrapPanel Margin="5">
-                        <TextBlock>完全相同</TextBlock>
-                        <localui:IntTextBox Value="{Binding SameTimes, Mode=TwoWay}" MaxValue="9" MinValue="0" />
-                        <TextBlock>次以上 (0與1等同此功能關閉)</TextBlock>
-                    </WrapPanel>
-                    <WrapPanel Margin="5">
-                        <TextBlock>取</TextBlock>
-                        <localui:IntTextBox Value="{Binding TakeCount, Mode=TwoWay}" MinValue="0" MaxValue="9999" />
-                        <TextBlock>組結果 (0為所有結果)</TextBlock>
-                    </WrapPanel>
-                </StackPanel>
+                        <WrapPanel>
+                            <WrapPanel Margin="5">
+                                <CheckBox IsChecked="{Binding EnabledStartTime, Mode=TwoWay}">開始時間</CheckBox>
+                                <localui:DateTimeTextBox Value="{Binding StartTime, Mode=TwoWay}" />
+                            </WrapPanel>
+                            <WrapPanel Margin="5">
+                                <CheckBox IsChecked="{Binding EnabledEndTime, Mode=TwoWay}">結束時間</CheckBox>
+                                <localui:DateTimeTextBox Value="{Binding EndTime, Mode=TwoWay}" />
+                            </WrapPanel>
+                        </WrapPanel>
+                        <WrapPanel Margin="5">
+                            <TextBlock>第</TextBlock>
+                            <localui:IntTextBox Value="{Binding BeginAt, Mode=TwoWay}" MaxValue="9999" MinValue="1" />
+                            <TextBlock>個開始, 間隔</TextBlock>
+                            <localui:IntTextBox Value="{Binding Step, Mode=TwoWay}" MaxValue="100" MinValue="0" />
+                            <TextBlock>個</TextBlock>
+
+                        </WrapPanel>
+                        <WrapPanel Margin="5">
+                            <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsPush}">推</CheckBox>
+                            <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsUnlike}">噓</CheckBox>
+                            <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsArrow}">箭頭</CheckBox>
+                        </WrapPanel>
+                        <WrapPanel Margin="5">
+                            <CheckBox Margin="0,0,8,0" IsChecked="{Binding ExcludeSameId}">排除重複的ID</CheckBox>
+                        </WrapPanel>
+                        <WrapPanel Margin="5">
+                            <TextBlock>完全相同</TextBlock>
+                            <localui:IntTextBox Value="{Binding SameTimes, Mode=TwoWay}" MaxValue="9" MinValue="0" />
+                            <TextBlock>次以上 (0與1等同此功能關閉)</TextBlock>
+                        </WrapPanel>
+                        <WrapPanel Margin="5">
+                            <TextBlock>取</TextBlock>
+                            <localui:IntTextBox Value="{Binding TakeCount, Mode=TwoWay}" MinValue="0" MaxValue="9999" />
+                            <TextBlock>組結果 (0為所有結果)</TextBlock>
+                        </WrapPanel>
+                        <WrapPanel Margin="5">
+                            <CheckBox Margin="0,0,8,0" IsChecked="{Binding HighlightResults}">於網頁內強調篩選結果</CheckBox>
+                        </WrapPanel>
+                    </StackPanel>
                 </Border>
             </Grid>
         </Grid>

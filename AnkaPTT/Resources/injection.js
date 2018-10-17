@@ -1,4 +1,5 @@
 ﻿var selectedIndex = -1;
+var highlightIndices;
 
 function getAllPushObjects() {
     // refreshPushObjects();
@@ -62,3 +63,18 @@ function fetch() {
     };
 }
 
+function highlight(indices) {
+    var pushesJo = $('.push');
+    if (highlightIndices) {
+        // unhighlight
+        highlightIndices.forEach(function (index) {
+            var jo = pushesJo[index];
+            if (jo) $(jo).css('background-color', '');
+        });
+    }
+    indices.forEach(function (index) {
+        var jo = pushesJo[index];
+        if (jo) $(jo).css('background-color', '#004000');
+    });
+    highlightIndices = indices;
+}

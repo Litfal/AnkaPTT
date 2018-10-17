@@ -53,7 +53,7 @@ namespace AnkaPTT
         private void OnGotResponse(dynamic result)
         {
             bool? fatalError = result.fatalerror;
-            Push[] pushes = Push.MapByDynamicList(result.pushes as IEnumerable<dynamic>).ToArray();
+            var pushes = Push.MapByDynamicList(result.pushes as IEnumerable<dynamic>).ToList();
             PushFetched?.Invoke(this, new PushFetchedEventArgs(fatalError, pushes));
         }
 
@@ -69,8 +69,8 @@ namespace AnkaPTT
         // false = push auto refresh OK
         // null = cloud't find push auto refresh status element
         public bool? FatalError { get; set; }   
-        public Push[] Pushes { get; private set; }
-        public PushFetchedEventArgs(bool? fatalError, Push[] pushes)
+        public List<Push> Pushes { get; private set; }
+        public PushFetchedEventArgs(bool? fatalError, List<Push> pushes)
         {
             FatalError = fatalError;
             this.Pushes = pushes;

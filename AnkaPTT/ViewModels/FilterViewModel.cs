@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AnkaPTT.ViewModels
 {
-    class FilterViewModel
+    class FilterViewModel : ObservableObject
     {
         public bool Enabled { get; set; } = true;
 
-        public bool EnabledStartTime { get; set; } = true;
+        public bool EnabledStartTime { get; set; } = false;
         public DateTime StartTime { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
 
         public bool EnabledEndTime { get; set; } = false;
@@ -29,6 +29,29 @@ namespace AnkaPTT.ViewModels
 
         public int SameTimes { get; set; } = 0;
 
+        public bool HighlightResults { get; set; } = true;
+
+
+        PushCollectionViewModel _allPushCollection;
+        public PushCollectionViewModel AllPushCollection {
+            get { return _allPushCollection; }
+            set
+            {
+                if (_allPushCollection != null)
+                    _allPushCollection.CollectionChanged -= AllPushCollection_CollectionChanged;
+                _allPushCollection = value;
+                if (_allPushCollection != null)
+                    _allPushCollection.CollectionChanged += AllPushCollection_CollectionChanged;
+            }
+        }
+
+        public PushCollectionViewModel FilteredPushCollection { get; } = new PushCollectionViewModel();
+
+
+        private void AllPushCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            FilteredPushCollection.ResetTo(ApplyFilter(AllPushCollection));
+        }
 
         public IEnumerable<PushViewModel> ApplyFilter(IEnumerable<PushViewModel> pushes)
         {
@@ -83,23 +106,6 @@ namespace AnkaPTT.ViewModels
                 }
 
                 return listofListMoreThanSameTimes.SelectMany(list => list);
-
-
-                enumerable = enumerable.ToList();
-                var sameContentGroups = from p in enumerable
-                                        group p by p.Content into g
-                                        where g.Count() > SameTimes
-                                        select new
-                                        {
-                                            Group = g,
-                                            MinIndex = g.Min(p2 => p2.Index)
-                                        };
-                sameContentGroups = sameContentGroups.OrderBy(g => g.MinIndex);
-                if (TakeCount > 0) sameContentGroups = sameContentGroups.Take(TakeCount);
-
-                return sameContentGroups
-                    .SelectMany(g => g.Group)
-                    .OrderBy(p => p.Index);
             }
             else
                 return TakeCount > 0 ? enumerable.Take(TakeCount) : enumerable;

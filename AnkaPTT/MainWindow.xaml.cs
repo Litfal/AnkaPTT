@@ -66,7 +66,7 @@ namespace AnkaPTT
             if (e.Frame.IsMain)
             {
                 pushFetcher.Stop();
-                Dispatcher.Invoke(viewModel.PushCollection.Clear);
+                Dispatcher.Invoke(viewModel.AllPushCollection.Clear);
             }
 
         }
@@ -78,6 +78,8 @@ namespace AnkaPTT
                 var clickedItem = ((FrameworkElement)e.OriginalSource).DataContext as ViewModels.PushViewModel;
                 if (clickedItem != null)
                 {
+                    //List<int> test = new List<int>() { 6 , 7 ,8 ,9 ,10, 15, 20 };
+                    //wb_main.GetMainFrame().EvaluateScriptAsync($"highlight([{string.Join(",", test)}])");
                     wb_main.GetMainFrame().EvaluateScriptAsync($"selectPush({clickedItem.Index})");
                 }
             }
