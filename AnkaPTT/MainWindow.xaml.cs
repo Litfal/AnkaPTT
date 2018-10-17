@@ -41,7 +41,10 @@ namespace AnkaPTT
             {
                 viewModel.UpdatePushes(e.Pushes);
             }
-            
+            else if (e.FatalError == true)
+            {
+                wb_main.GetBrowser().Reload();
+            }
         }
 
         private void txt_url_KeyUp(object sender, KeyEventArgs e)

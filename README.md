@@ -17,7 +17,14 @@ AnkaPTT is using CefSharp (https://github.com/cefsharp/CefSharp) for webbrowser.
 
 * 右側清單用滑鼠左鍵連點，網頁會快轉至該推文位置，並強調
 
-其他就是篩選器的使用了
+* 篩選器是從最上面套用到最下面，目前無法調整順序
+
+## 注意事項
+
+* 基於網頁版實作
+
+* 
+
 
 ## Todo list:
 
