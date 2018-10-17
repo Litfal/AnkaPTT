@@ -198,14 +198,18 @@
                 <Border Grid.Row="1" BorderThickness="1" BorderBrush="{StaticResource ForegroundBrush}"  >
                     <StackPanel DataContext="{Binding FilterViewModel}" >
 
-                        <WrapPanel>
-                            <WrapPanel Margin="5">
+                        <WrapPanel Margin="5">
+                            <WrapPanel Margin="0,0,8,0">
                                 <CheckBox IsChecked="{Binding EnabledStartTime, Mode=TwoWay}">開始時間</CheckBox>
                                 <localui:DateTimeTextBox Value="{Binding StartTime, Mode=TwoWay}" />
                             </WrapPanel>
-                            <WrapPanel Margin="5">
+                            <WrapPanel Margin="0,0,8,0">
                                 <CheckBox IsChecked="{Binding EnabledEndTime, Mode=TwoWay}">結束時間</CheckBox>
                                 <localui:DateTimeTextBox Value="{Binding EndTime, Mode=TwoWay}" />
+                            </WrapPanel>
+                            <WrapPanel Margin="0,0,8,0">
+                                <CheckBox IsChecked="{Binding EnableContainsText, Mode=TwoWay}">包含下列文字</CheckBox>
+                                <TextBox MinWidth="30" Text="{Binding ContainsText}" />
                             </WrapPanel>
                         </WrapPanel>
                         <WrapPanel Margin="5">

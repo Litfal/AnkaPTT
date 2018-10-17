@@ -14,6 +14,9 @@ namespace AnkaPTT.ViewModels
         bool _enabledEndTime = false;
         DateTime _endTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
 
+        bool _enableContainsText;
+        string _containsText;
+
         bool _containsPush = true;
         bool _containsUnlike = false;
         bool _containsArrow = false;
@@ -33,6 +36,9 @@ namespace AnkaPTT.ViewModels
 
         public bool EnabledEndTime { get { return _enabledEndTime; } set { SetField(ref _enabledEndTime, value); } }
         public DateTime EndTime { get { return _endTime; } set { SetField(ref _endTime, value); } }
+
+        public bool EnableContainsText { get { return _enableContainsText; } set { SetField(ref _enableContainsText, value); } }
+        public string ContainsText { get { return _containsText; } set { SetField(ref _containsText, value); } }
 
         public bool ContainsPush { get { return _containsPush; } set { SetField(ref _containsPush, value); } }
         public bool ContainsUnlike { get { return _containsUnlike; } set { SetField(ref _containsUnlike, value); } }
@@ -94,6 +100,13 @@ namespace AnkaPTT.ViewModels
                 query = query.SkipWhile(p => !p.GuessDateTime.HasValue || p.GuessDateTime < StartTime);
             if (EnabledEndTime)
                 query = query.TakeWhile(p => !p.GuessDateTime.HasValue || p.GuessDateTime < EndTime);
+
+            if (EnableContainsText)
+            {
+                string containsText = ContainsText.Trim();
+                if (containsText.Length > 0)
+                    query = query.Where(p => p.Content.Contains(containsText));
+            }
 
             // Tag filter
             HashSet<string> tags = new HashSet<string>();
