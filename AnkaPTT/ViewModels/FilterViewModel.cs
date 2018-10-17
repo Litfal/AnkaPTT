@@ -8,28 +8,47 @@ namespace AnkaPTT.ViewModels
 {
     class FilterViewModel : ObservableObject
     {
-        public bool Enabled { get; set; } = true;
+        bool _enabled = true;
+        bool _enabledStartTime = false;
+        DateTime _startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
+        bool _enabledEndTime = false;
+        DateTime _endTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
 
-        public bool EnabledStartTime { get; set; } = false;
-        public DateTime StartTime { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
+        bool _containsPush = true;
+        bool _containsUnlike = false;
+        bool _containsArrow = false;
+        bool _excludeSameId = false;
 
-        public bool EnabledEndTime { get; set; } = false;
-        public DateTime EndTime { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
-
-        public bool ContainsPush { get; set; } = true;
-        public bool ContainsUnlike { get; set; } = false;
-        public bool ContainsArrow { get; set; } = false;
-        public bool ExcludeSameId { get; set; } = false;
+        int _beginAt = 1;
+        int _step = 0;
+        int _takeCount = 0;
+        int _sameTimes = 0;
+        bool _highlightResults = true;
 
 
+        public bool Enabled { get { return _enabled; } set { SetField(ref _enabled, value); } }
 
-        public int BeginAt { get; set; } = 1;
-        public int Step { get; set; } = 0;
-        public int TakeCount { get; set; } = 0;
+        public bool EnabledStartTime { get { return _enabledStartTime; } set { SetField(ref _enabledStartTime, value); }  }
+        public DateTime StartTime { get { return _startTime; } set { SetField(ref _startTime, value); } }
 
-        public int SameTimes { get; set; } = 0;
+        public bool EnabledEndTime { get { return _enabledEndTime; } set { SetField(ref _enabledEndTime, value); } }
+        public DateTime EndTime { get { return _endTime; } set { SetField(ref _endTime, value); } }
 
-        public bool HighlightResults { get; set; } = true;
+        public bool ContainsPush { get { return _containsPush; } set { SetField(ref _containsPush, value); } }
+        public bool ContainsUnlike { get { return _containsUnlike; } set { SetField(ref _containsUnlike, value); } }
+        public bool ContainsArrow { get { return _containsArrow; } set { SetField(ref _containsArrow, value); } }
+
+        public bool ExcludeSameId { get { return _excludeSameId; } set { SetField(ref _excludeSameId, value); } }
+
+
+        public int BeginAt { get { return _beginAt; } set { SetField(ref _beginAt, value); } }
+        public int Step { get { return _step; } set { SetField(ref _step, value); } }
+
+        public int TakeCount { get { return _takeCount; } set { SetField(ref _takeCount, value); } }
+
+        public int SameTimes { get { return _sameTimes; } set { SetField(ref _sameTimes, value); } }
+
+        public bool HighlightResults { get { return _highlightResults; } set { SetField(ref _highlightResults, value); } }
 
 
         PushCollectionViewModel _allPushCollection;
@@ -47,8 +66,18 @@ namespace AnkaPTT.ViewModels
 
         public PushCollectionViewModel FilteredPushCollection { get; } = new PushCollectionViewModel();
 
-
         private void AllPushCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            applyFilter();
+        }
+
+        public override void OnPropertyChanged(string propertyName)
+        {
+            base.OnPropertyChanged(propertyName);
+            applyFilter();
+        }
+
+        void applyFilter()
         {
             FilteredPushCollection.ResetTo(ApplyFilter(AllPushCollection));
         }
