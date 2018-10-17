@@ -51,12 +51,7 @@ namespace AnkaPTT
         {
             if(e.Key == Key.Enter)
             {
-                if (wb_main.Address == txt_url.Text)
-                    wb_main.GetBrowser().Reload();
-                else
-                    wb_main.Address = txt_url.Text;
-                // wb_main.RequestContext
-
+                Refresh_Click(sender, e);
             }
         }
 
@@ -85,6 +80,14 @@ namespace AnkaPTT
                     wb_main.GetMainFrame().EvaluateScriptAsync($"selectPush({clickedItem.Index})");
                 }
             }
+        }
+
+        private void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            if (wb_main.Address == txt_url.Text)
+                wb_main.GetBrowser().Reload();
+            else
+                wb_main.Address = txt_url.Text;
         }
     }
 }

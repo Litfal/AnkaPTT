@@ -123,12 +123,13 @@
         </Grid.RowDefinitions>
         <Grid Margin="0,0,0,3" Grid.Row="0" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="1" x:Name="txt_url" KeyUp="txt_url_KeyUp" HorizontalAlignment="Stretch" >
+            <TextBox Grid.Column="0" x:Name="txt_url" KeyUp="txt_url_KeyUp" HorizontalAlignment="Stretch" >
                 https://www.ptt.cc/bbs/C_Chat/M.1539521892.A.1C4.html
             </TextBox>
+            <Button Grid.Column="1" Click="Refresh_Click">　→　</Button>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
