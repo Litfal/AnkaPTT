@@ -234,6 +234,7 @@
                         </WrapPanel>
                         <WrapPanel Margin="5">
                             <CheckBox Margin="0,0,8,0" IsChecked="{Binding HighlightResults}">於網頁內強調篩選結果</CheckBox>
+                            <CheckBox Margin="0,0,8,0" IsChecked="{Binding ReverseView}">反向檢視推文</CheckBox>
                         </WrapPanel>
                     </StackPanel>
                 </Border>

@@ -24,7 +24,7 @@ namespace AnkaPTT.ViewModels
         int _takeCount = 0;
         int _sameTimes = 0;
         bool _highlightResults = true;
-
+        bool _reverseView = false;
 
         public bool Enabled { get { return _enabled; } set { SetField(ref _enabled, value); } }
 
@@ -49,8 +49,9 @@ namespace AnkaPTT.ViewModels
         public int SameTimes { get { return _sameTimes; } set { SetField(ref _sameTimes, value); } }
 
         public bool HighlightResults { get { return _highlightResults; } set { SetField(ref _highlightResults, value); } }
-
-
+        
+        public bool ReverseView { get { return _reverseView; } set { SetField(ref _reverseView, value); } }
+        
         PushCollectionViewModel _allPushCollection;
         public PushCollectionViewModel AllPushCollection {
             get { return _allPushCollection; }
@@ -134,10 +135,14 @@ namespace AnkaPTT.ViewModels
                         listofListMoreThanSameTimes.Add(list);
                 }
 
-                return listofListMoreThanSameTimes.SelectMany(list => list);
+                enumerable = listofListMoreThanSameTimes.SelectMany(list => list);
             }
             else
-                return TakeCount > 0 ? enumerable.Take(TakeCount) : enumerable;
+                enumerable = TakeCount > 0 ? enumerable.Take(TakeCount) : enumerable;
+
+            if (ReverseView) enumerable = enumerable.Reverse();
+
+            return enumerable;
         }
 
         static IEnumerable<PushViewModel> stepEnumerate(IEnumerable<PushViewModel> query, int step)
