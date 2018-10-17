@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,8 @@ namespace AnkaPTT
 
         PushFetcher pushFetcher = new PushFetcher();
 
+        System.Timers.Timer _autoRefreshTimer = new System.Timers.Timer(10000);
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,7 +37,17 @@ namespace AnkaPTT
             DataContext = viewModel;
             pushFetcher.PushFetched += PushFetcher_PushFetched;
             Title = $"AnkaPTT {GetType().Assembly.GetName().Version}";
+
+            _autoRefreshTimer.Elapsed += (sender, e) => wb_main.GetBrowser().Reload();
         }
+
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _autoRefreshTimer.Dispose();
+            base.OnClosing(e);
+        }
+
 
         private void PushFetcher_PushFetched(object sender, PushFetchedEventArgs e)
         {
@@ -89,6 +102,17 @@ namespace AnkaPTT
                 wb_main.GetBrowser().Reload();
             else
                 wb_main.Address = txt_url.Text;
+        }
+
+
+        private void AutoRefresh_Checked(object sender, RoutedEventArgs e)
+        {
+            _autoRefreshTimer.Start();
+        }
+
+        private void AutoRefresh_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _autoRefreshTimer.Stop();
         }
     }
 }
