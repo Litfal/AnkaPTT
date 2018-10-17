@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using CefSharp;
+using CefSharp.Wpf;
 
 namespace AnkaPTT.ViewModels
 {
@@ -16,9 +18,8 @@ namespace AnkaPTT.ViewModels
 
         public PushCollectionViewModel AllPushCollection { get; } = new PushCollectionViewModel();
 
-        private List<PushViewModel> _allPushes;
-
         public FilterViewModel FilterViewModel { get; } = new FilterViewModel();
+        public ChromiumWebBrowser WebBrowser { get; internal set; }
 
         public MainViewModel()
         {
@@ -27,6 +28,14 @@ namespace AnkaPTT.ViewModels
                 (sender, e) => Dispatcher.Invoke(() =>
                 {
                     ViewPushCollection.ResetTo(FilterViewModel.FilteredPushCollection);
+                    if (FilterViewModel.HighlightResults)
+                    {
+                        WebBrowser.GetMainFrame().EvaluateScriptAsync($"highlight([{string.Join(",", ViewPushCollection.Select(p => p.Index))}])");
+                    }
+                    else
+                    {
+                        WebBrowser.GetMainFrame().EvaluateScriptAsync($"highlight([])");
+                    }
                 });
         }
 
@@ -41,14 +50,6 @@ namespace AnkaPTT.ViewModels
             {
                 AllPushCollection.AddRange(pushViewModels.Skip(AllPushCollection.Count));
             }
-
-            //if (FilteredPushCollection.Count == pushes.Length) return;
-            //_allPushes = new List<PushViewModel>(PushViewModel.ToViewModels(pushes));
-            //var filteredPushes = FilterViewModel.ApplyFilter(_allPushes).ToList();
-            //System.Diagnostics.Debug.WriteLine(filteredPushes.Count);
-            //Dispatcher.Invoke(() => FilteredPushCollection.ResetTo(filteredPushes));
-
-
         }
 
 

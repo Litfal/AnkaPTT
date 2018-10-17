@@ -1,5 +1,5 @@
 ﻿var selectedIndex = -1;
-var highlightIndices;
+var selectedPushElem = null;
 
 function getAllPushObjects() {
     // refreshPushObjects();
@@ -37,18 +37,18 @@ function scrollToPush(index) {
 }
 
 function selectPush(index) {
-    if (index === selectedIndex) return;
-    if (selectedIndex >= 0) {
-        $($('.push')[selectedIndex]).css('background-color', '');
+    if (selectedPushElem) {
+        $(selectedPushElem).removeClass('push-sel');
+        selectedPushElem = null;
     }
     if (index >= 0) {
         var jo = $('.push')[index];
         if (jo) {
-            $(jo).css('background-color', '#404040');
+            $(jo).addClass('push-sel');
             scrollToElem(jo);
+            selectedPushElem = jo;
         }
     }
-    selectedIndex = index;
 }
 
 function clickToggleAuto() {
@@ -65,16 +65,13 @@ function fetch() {
 
 function highlight(indices) {
     var pushesJo = $('.push');
-    if (highlightIndices) {
-        // unhighlight
-        highlightIndices.forEach(function (index) {
-            var jo = pushesJo[index];
-            if (jo) $(jo).css('background-color', '');
-        });
-    }
+    // unhighlight
+    pushesJo.removeClass('push-hl');
     indices.forEach(function (index) {
         var jo = pushesJo[index];
-        if (jo) $(jo).css('background-color', '#004000');
+        if (jo) $(jo).addClass('push-hl');
     });
-    highlightIndices = indices;
 }
+
+// add css for push
+$('head').append('<style type="text/css">.push-hl{background-color:#004000;}.push-sel{background-color:#404040;}</style>')

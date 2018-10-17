@@ -30,6 +30,7 @@ namespace AnkaPTT
         {
             InitializeComponent();
             viewModel.Dispatcher = Dispatcher;
+            viewModel.WebBrowser = wb_main;
             DataContext = viewModel;
             pushFetcher.PushFetched += PushFetcher_PushFetched;
         }
@@ -78,8 +79,6 @@ namespace AnkaPTT
                 var clickedItem = ((FrameworkElement)e.OriginalSource).DataContext as ViewModels.PushViewModel;
                 if (clickedItem != null)
                 {
-                    //List<int> test = new List<int>() { 6 , 7 ,8 ,9 ,10, 15, 20 };
-                    //wb_main.GetMainFrame().EvaluateScriptAsync($"highlight([{string.Join(",", test)}])");
                     wb_main.GetMainFrame().EvaluateScriptAsync($"selectPush({clickedItem.Index})");
                 }
             }
