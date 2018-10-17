@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:AnkaPTT"
         xmlns:localui="clr-namespace:AnkaPTT.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1280">
+        Title="AnkaPTT" Height="600" Width="1280">
     <Window.Resources>
         <Color x:Key="ForegroundColor">#FFDDDDDD</Color>
         <Color x:Key="BorderMediumColor">#FF888888</Color>
