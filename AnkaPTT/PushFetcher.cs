@@ -30,7 +30,6 @@ namespace AnkaPTT
             CancellationToken ct = _cts.Token;
             Task.Factory.StartNew(() =>
             {
-                ct.ThrowIfCancellationRequested();
                 browser.MainFrame.EvaluateScriptAsync(injectScript + "clickToggleAuto();").Wait();
                 while (true)
                 {

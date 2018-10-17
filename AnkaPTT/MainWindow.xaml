@@ -125,7 +125,8 @@
         </Grid.RowDefinitions>
         <TextBox Margin="0,0,0,3" Grid.Row="0" x:Name="txt_url" KeyUp="txt_url_KeyUp">
             <!--https://www.ptt.cc/bbs/Test/M.1539602820.A.175.html-->
-            https://www.ptt.cc/bbs/Gossiping/M.1539657199.A.1F1.html
+            <!--https://www.ptt.cc/bbs/Gossiping/M.1539657199.A.1F1.html-->
+            https://www.ptt.cc/bbs/C_Chat/M.1539521892.A.1C4.html
         </TextBox>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -188,11 +189,11 @@
         <StackPanel DataContext="{Binding FilterViewModel}" Grid.Row="2" >
             <WrapPanel>
                 <WrapPanel Margin="5">
-                    <CheckBox>開始時間</CheckBox>
+                    <CheckBox IsChecked="{Binding EnabledStartTime, Mode=TwoWay}">開始時間</CheckBox>
                     <localui:DateTimeTextBox Value="{Binding StartTime, Mode=TwoWay}" />
                 </WrapPanel>
                 <WrapPanel Margin="5">
-                    <CheckBox>結束時間</CheckBox>
+                    <CheckBox IsChecked="{Binding EnabledEndTime, Mode=TwoWay}">結束時間</CheckBox>
                     <localui:DateTimeTextBox Value="{Binding EndTime, Mode=TwoWay}" />
                 </WrapPanel>
             </WrapPanel>
@@ -210,12 +211,12 @@
                 <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsArrow}">箭頭</CheckBox>
             </WrapPanel>
             <WrapPanel Margin="5">
-                <CheckBox Margin="0,0,8,0" IsChecked="{Binding ContainsArrow}">排除重複的ID</CheckBox>
+                <CheckBox Margin="0,0,8,0" IsChecked="{Binding ExcludeSameId}">排除重複的ID</CheckBox>
             </WrapPanel>
             <WrapPanel Margin="5">
                 <TextBlock>完全相同</TextBlock>
                 <localui:IntTextBox Value="{Binding SameTimes, Mode=TwoWay}" MaxValue="9" MinValue="0" />
-                <TextBlock>次以上</TextBlock>
+                <TextBlock>次以上 (0與1等同此功能關閉)</TextBlock>
             </WrapPanel>
             <WrapPanel Margin="5">
                 <TextBlock>取</TextBlock>

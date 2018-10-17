@@ -24,15 +24,18 @@ namespace AnkaPTT.ViewModels
         {
             if (PushCollection.Count == pushes.Length) return;
             _allPushes = new List<PushViewModel>(PushViewModel.ToViewModels(pushes));
+            var filteredPushes = FilterViewModel.ApplyFilter(_allPushes).ToList();
+            System.Diagnostics.Debug.WriteLine(filteredPushes.Count);
+            Dispatcher.Invoke(() => PushCollection.ResetTo(filteredPushes));
 
-            if (PushCollection.Count > pushes.Length)
-            {
-                Dispatcher.Invoke(() => PushCollection.ResetTo(_allPushes));
-            }
-            else
-            {
-                Dispatcher.Invoke(() => PushCollection.AddRange(_allPushes.Skip(PushCollection.Count)));
-            }
+            //if (PushCollection.Count > pushes.Length)
+            //{
+            //    Dispatcher.Invoke(() => PushCollection.ResetTo(_allPushes));
+            //}
+            //else
+            //{
+            //    Dispatcher.Invoke(() => PushCollection.AddRange(_allPushes.Skip(PushCollection.Count)));
+            //}
         }
 
 

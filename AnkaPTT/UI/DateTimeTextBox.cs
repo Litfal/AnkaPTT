@@ -24,6 +24,8 @@ namespace AnkaPTT.UI
             }
         }
 
+        public bool AutoCollapse { get; set; } = false;
+
         private void OnValueChanged()
         {
             updateText();
@@ -41,10 +43,10 @@ namespace AnkaPTT.UI
 
         private void updateText()
         {
-            if (IsFocused)
-                Text = Value.ToString("yyyy/MM/dd HH:mm");
-            else
+            if (AutoCollapse && !IsFocused)
                 Text = Value.ToString("HH:mm");
+            else
+                Text = Value.ToString("yyyy/MM/dd HH:mm");
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
