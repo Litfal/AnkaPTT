@@ -131,7 +131,7 @@
                 https://www.ptt.cc/bbs/C_Chat/M.1539521892.A.1C4.html
             </TextBox>
             <Button Grid.Column="1" Click="Refresh_Click">　→　</Button>
-            <CheckBox Grid.Column="2" Checked="AutoRefresh_Checked" Unchecked="AutoRefresh_Unchecked">Auto Refresh</CheckBox>
+            <CheckBox Grid.Column="2" Checked="AutoRefresh_Checked" Unchecked="AutoRefresh_Unchecked">自動重新載入</CheckBox>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -159,14 +159,14 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Id" Width="95px">
+                            <GridViewColumn Header="Id" Width="105px">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Userid}" HorizontalAlignment="Left" Foreground="{StaticResource IdBrush}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="350px">
+                            <GridViewColumn Width="380px">
                                 <GridViewColumn.HeaderTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="Content" HorizontalAlignment="Left"  />

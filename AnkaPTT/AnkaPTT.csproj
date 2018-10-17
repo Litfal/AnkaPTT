@@ -112,6 +112,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="LoadPageModes.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="Push.cs" />
     <Compile Include="PushFetcher.cs" />
