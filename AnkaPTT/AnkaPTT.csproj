@@ -119,6 +119,9 @@
     <Compile Include="PushFilterView.xaml.cs">
       <DependentUpon>PushFilterView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PushFilterViewWindow.xaml.cs">
+      <DependentUpon>PushFilterViewWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\IntTextBox.cs" />
     <Compile Include="UI\DateTimeTextBox.cs" />
     <Compile Include="ViewModels\FilterViewModel.cs" />
@@ -138,6 +141,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PushFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PushFilterViewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

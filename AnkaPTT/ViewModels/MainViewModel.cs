@@ -20,29 +20,45 @@ namespace AnkaPTT.ViewModels
             {
                 _dispatcher = value;
                 FilterViewModel.FilteredPushCollection.Dispatcher = value;
-
-                ViewPushCollection.Dispatcher = value;
             }
         }
 
-        public PushCollectionViewModel ViewPushCollection { get; } = new PushCollectionViewModel();
-
         public PushCollectionViewModel AllPushCollection { get; } = new PushCollectionViewModel();
 
-        public FilterViewModel FilterViewModel { get; } = new FilterViewModel();
+        public FilterViewModel FilterViewModel { get; }
+
+        private List<FilterViewModel> _filterViewModels = new List<FilterViewModel>();
+
+        Queue<int> _highlightKeys = new Queue<int>(Enumerable.Range(0, 6));
+
         public ChromiumWebBrowser WebBrowser { get; internal set; }
 
         public MainViewModel()
         {
-            FilterViewModel.MonitorPushCollection = this.AllPushCollection;
-            FilterViewModel.PushDoubleClicked += (sender, e) => EvaluateScriptAsync($"selectPush({e.Push.Index})");
-    
-            FilterViewModel.FilteredPushCollection.CollectionChanged += (sender, e) =>
-                {
-                    IEnumerable<PushViewModel> list = (IEnumerable<PushViewModel>)sender;
-                    string param = FilterViewModel.HighlightResults ? string.Join(",", list.Select(p => p.Index)) : "";
-                    EvaluateScriptAsync($"highlight([{param}])");
-                };
+            FilterViewModel = CreateNewFilterViewModel();
+            FilterViewModel.HighlightResults = true;
+        }
+
+        public FilterViewModel CreateNewFilterViewModel()
+        {
+            if (_highlightKeys.Count == 0) return null;
+            var filterViewModel = new FilterViewModel();
+            filterViewModel.HighlightKey = _highlightKeys.Dequeue();
+            filterViewModel.PushDoubleClicked += (sender, e) => EvaluateScriptAsync($"selectPush({e.Push.Index})");
+            filterViewModel.FilteredPushCollection.CollectionChanged += (sender, e) =>
+            {
+                IEnumerable<PushViewModel> list = (IEnumerable<PushViewModel>)sender;
+                string param = filterViewModel.HighlightResults ? string.Join(",", list.Select(p => p.Index)) : "";
+                EvaluateScriptAsync($"highlight({filterViewModel.HighlightKey},[{param}])");
+            };
+            filterViewModel.SetMainViewModel(this);
+            _filterViewModels.Add(filterViewModel);
+            return filterViewModel;
+        }
+
+        internal void ReleseFilter(FilterViewModel filterViewModel)
+        {
+            _highlightKeys.Enqueue(filterViewModel.HighlightKey);
         }
 
         private Task<JavascriptResponse> EvaluateScriptAsync(string script)
@@ -97,8 +113,6 @@ namespace AnkaPTT.ViewModels
                 Dispatcher.Invoke(action, priority);
             }
         }
-
-
 
 
     }

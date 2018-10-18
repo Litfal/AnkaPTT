@@ -50,9 +50,13 @@ namespace AnkaPTT
         protected override void OnClosing(CancelEventArgs e)
         {
             _autoRefreshTimer.Dispose();
+            // close others filter window
+            foreach (Window win in App.Current.Windows)
+            {
+                if (win != this) win.Close();
+            }
             base.OnClosing(e);
         }
-
 
         private void PushFetcher_PushFetched(object sender, PushFetchedEventArgs e)
         {
@@ -224,6 +228,19 @@ namespace AnkaPTT
         private void AutoRefresh_Unchecked(object sender, RoutedEventArgs e)
         {
             _autoRefreshTimer.Stop();
+        }
+
+        private void BtnOpenNewFilterWindow_Click(object sender, RoutedEventArgs e)
+        {
+            var newFilterViewModel = viewModel.CreateNewFilterViewModel();
+            if(newFilterViewModel == null)
+            {
+                MessageBox.Show("篩選視窗數量已達上限","AnkaPTT");
+                return;
+            }
+            PushFilterViewWindow newWindow = new PushFilterViewWindow();
+            newWindow.DataContext = newFilterViewModel;
+            newWindow.Show();
         }
     }
 }

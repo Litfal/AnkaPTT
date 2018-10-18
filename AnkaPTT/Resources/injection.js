@@ -62,15 +62,15 @@ function fetch() {
     };
 }
 
-function highlight(indices) {
+function highlight(key,indices) {
     var pushesJo = $('.push');
     // unhighlight
-    pushesJo.removeClass('push-hl');
+    pushesJo.removeClass('push-hl' + key);
     indices.forEach(function (index) {
         var jo = pushesJo[index];
-        if (jo) $(jo).addClass('push-hl');
+        if (jo) $(jo).addClass('push-hl' + key);
     });
 }
 
 // add css for push
-$('head').append('<style type="text/css">.push-hl{background-color:#004000;}.push-sel{background-color:#404040;}</style>')
+$('head').append('<style type="text/css">.push-hl0{background-color:#004000;}.push-hl1{background-color:#400000;}.push-hl2{background-color:#000060;}.push-hl3{background-color:#004040;}.push-hl4{background-color:#300030;}.push-hl5{background-color:#404000;}.push-sel{background-color:#404040;}</style>')

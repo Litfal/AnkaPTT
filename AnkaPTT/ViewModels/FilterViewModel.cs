@@ -31,6 +31,7 @@ namespace AnkaPTT.ViewModels
 
         public bool Enabled { get { return _enabled; } set { SetField(ref _enabled, value); } }
 
+
         public bool EnabledStartTime { get { return _enabledStartTime; } set { SetField(ref _enabledStartTime, value); }  }
         public DateTime StartTime { get { return _startTime; } set { SetField(ref _startTime, value); } }
 
@@ -57,21 +58,53 @@ namespace AnkaPTT.ViewModels
         public bool HighlightResults { get { return _highlightResults; } set { SetField(ref _highlightResults, value); } }
         
         public bool ReverseView { get { return _reverseView; } set { SetField(ref _reverseView, value); } }
-        
+
+
+        public int HighlightKey { get; set; }
+
+        private MainViewModel _mainViewModel;
+
         PushCollectionViewModel _monitorPushCollection;
         public PushCollectionViewModel MonitorPushCollection {
             get { return _monitorPushCollection; }
-            set
+            private set
             {
+                if (_monitorPushCollection == value) return;
                 if (_monitorPushCollection != null)
+                {
                     _monitorPushCollection.CollectionChanged -= MonitorPushCollection_CollectionChanged;
+                    FilteredPushCollection.Clear();
+                }
                 _monitorPushCollection = value;
                 if (_monitorPushCollection != null)
+                {
                     _monitorPushCollection.CollectionChanged += MonitorPushCollection_CollectionChanged;
+                    MonitorPushCollection_CollectionChanged(_monitorPushCollection, 
+                        new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Reset));
+                }
             }
         }
 
         public PushCollectionViewModel FilteredPushCollection { get; } = new PushCollectionViewModel();
+
+        public FilterViewModel()
+        {
+        }
+
+        public void SetMainViewModel(MainViewModel mainViewModel)
+        {
+            if (_mainViewModel != null) throw new Exception("SetMainViewModel only can be called once.");
+            _mainViewModel = mainViewModel;
+            MonitorPushCollection = _mainViewModel.AllPushCollection;
+            FilteredPushCollection.Dispatcher = _mainViewModel.Dispatcher;
+        }
+
+        internal void Dispose()
+        {
+            MonitorPushCollection = null;
+         
+            _mainViewModel.ReleseFilter(this);
+        }
 
         private void MonitorPushCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

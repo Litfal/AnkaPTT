@@ -23,6 +23,8 @@ AnkaPTT is using CefSharp (https://github.com/cefsharp/CefSharp) for webbrowser.
 
 * 如果網頁版的自動更新推文功能故障，可使用[自動重新載入]功能，預設為10秒刷新一次
 
+* 可開最多5個額外的篩選視窗，且分別對網頁推文改變不同的底色強調
+
 ## 注意事項
 
 * 基於網頁版實作，如果因為修文關係，破壞了推文格式，解析會失敗
@@ -33,8 +35,6 @@ AnkaPTT is using CefSharp (https://github.com/cefsharp/CefSharp) for webbrowser.
 
 ## Todo list:
 
-* 多個篩選器視窗 (目前可以用多開解決)
-
 * 全域設定檔
 
 * 篩選器設定檔
@@ -42,3 +42,5 @@ AnkaPTT is using CefSharp (https://github.com/cefsharp/CefSharp) for webbrowser.
 * 分離一些混在 ViewModel 裡面的業務邏輯程式碼 (不過我有點懶)
 
 * 調整[自動重新載入]功能與更新推文方式的模式
+
+* MainViewModel - FilterViewModel - FilterView 這邊的關係寫法很醜，希望能重構
