@@ -29,7 +29,7 @@ AnkaPTT is using CefSharp (https://github.com/cefsharp/CefSharp) for webbrowser.
 
 * 偶爾網頁版的自動更新推文功能會故障，可使用[自動重新載入]功能
 
-* 載入網頁時，無論是手動載入，或是[自動重新載入]功能，都會檢查頁面是否有更新，若無更新則不重新整理畫面
+* [自動重新載入]功能載入網頁時，會檢查頁面是否有更新，若無更新則不重新整理畫面
 
 ## Todo list:
 
@@ -38,3 +38,5 @@ AnkaPTT is using CefSharp (https://github.com/cefsharp/CefSharp) for webbrowser.
 * 全域設定檔
 
 * 篩選器設定檔
+
+* 分離一些混在 ViewModel 裡面的業務邏輯程式碼 (不過我有點懶)

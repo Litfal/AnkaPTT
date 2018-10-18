@@ -1,5 +1,4 @@
-﻿var selectedIndex = -1;
-var selectedPushElem = null;
+﻿var selectedPushElem = null;
 
 function getAllPushObjects() {
     // refreshPushObjects();

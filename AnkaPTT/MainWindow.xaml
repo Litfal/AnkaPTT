@@ -131,7 +131,7 @@
                 https://www.ptt.cc/bbs/C_Chat/M.1539521892.A.1C4.html
             </TextBox>
             <Button Grid.Column="1" Click="Refresh_Click">　→　</Button>
-            <CheckBox Grid.Column="2" Checked="AutoRefresh_Checked" Unchecked="AutoRefresh_Unchecked">自動重新載入</CheckBox>
+            <ToggleButton Grid.Column="2" Checked="AutoRefresh_Checked" Unchecked="AutoRefresh_Unchecked">自動重新載入</ToggleButton>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

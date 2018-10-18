@@ -62,7 +62,7 @@ namespace AnkaPTT
             }
             else if (e.FatalError == true)
             {
-                wb_main.GetBrowser().Reload();
+                Reload(true);
             }
         }
 
@@ -70,13 +70,13 @@ namespace AnkaPTT
         {
             if(e.Key == Key.Enter)
             {
-                await LoadPage();
+                await LoadPage(true);
             }
         }
 
         private async void Refresh_Click(object sender, RoutedEventArgs e)
         {
-            await LoadPage();
+            await LoadPage(true);
         }
 
         private void wb_main_FrameLoadEnd(object sender, CefSharp.FrameLoadEndEventArgs e)
@@ -109,19 +109,19 @@ namespace AnkaPTT
         // it's OK on non-UI-thread
         private string GetCurrentUrl() => wb_main.GetMainFrame().Url;
 
-        private async void Reload()
+        private async void Reload(bool force = false)
         {
             var url = GetCurrentUrl();
             if (url != "")
-                await LoadPage(url);
+                await LoadPage(url, force);
         }
 
-        private async Task LoadPage()
+        private async Task LoadPage(bool force = false)
         {
-            await LoadPage(txt_url.Text);
+            await LoadPage(txt_url.Text, force);
         }
 
-        private async Task LoadPage(string url)
+        private async Task LoadPage(string url, bool force = false)
         {
             if (_loadPageMode == LoadPageModes.Browser)
                 wb_main.Load(url);
@@ -138,7 +138,7 @@ namespace AnkaPTT
                     {
                         return;
                     }
-                    compareAndLoadHtml(html, url);
+                    compareAndLoadHtml(html, url, force);
                 }
             }
         }
@@ -147,10 +147,10 @@ namespace AnkaPTT
         static System.Text.RegularExpressions.Regex _pollurlRegex = 
             new System.Text.RegularExpressions.Regex("data-pollurl=\"(?<pollurl>[^\"]+)\"", System.Text.RegularExpressions.RegexOptions.Compiled);
 
-        private void compareAndLoadHtml(string html, string url)
+        private void compareAndLoadHtml(string html, string url, bool force = false)
         {
             string newCheckData = string.Empty;
-            bool alwaysLoad = (GetCurrentUrl() != url);
+            bool alwaysLoad = force || (GetCurrentUrl() != url);
             if (_loadPageMode.HasFlag(LoadPageModes.ComparePollurl))
             {
                 var m = _pollurlRegex.Match(html);
