@@ -58,22 +58,22 @@ namespace AnkaPTT.ViewModels
         
         public bool ReverseView { get { return _reverseView; } set { SetField(ref _reverseView, value); } }
         
-        PushCollectionViewModel _allPushCollection;
-        public PushCollectionViewModel AllPushCollection {
-            get { return _allPushCollection; }
+        PushCollectionViewModel _monitorPushCollection;
+        public PushCollectionViewModel MonitorPushCollection {
+            get { return _monitorPushCollection; }
             set
             {
-                if (_allPushCollection != null)
-                    _allPushCollection.CollectionChanged -= AllPushCollection_CollectionChanged;
-                _allPushCollection = value;
-                if (_allPushCollection != null)
-                    _allPushCollection.CollectionChanged += AllPushCollection_CollectionChanged;
+                if (_monitorPushCollection != null)
+                    _monitorPushCollection.CollectionChanged -= MonitorPushCollection_CollectionChanged;
+                _monitorPushCollection = value;
+                if (_monitorPushCollection != null)
+                    _monitorPushCollection.CollectionChanged += MonitorPushCollection_CollectionChanged;
             }
         }
 
         public PushCollectionViewModel FilteredPushCollection { get; } = new PushCollectionViewModel();
 
-        private void AllPushCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void MonitorPushCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             applyFilter();
         }
@@ -86,7 +86,7 @@ namespace AnkaPTT.ViewModels
 
         void applyFilter()
         {
-            FilteredPushCollection.ResetTo(ApplyFilter(AllPushCollection));
+            FilteredPushCollection.ResetTo(ApplyFilter(MonitorPushCollection));
         }
 
         public IEnumerable<PushViewModel> ApplyFilter(IEnumerable<PushViewModel> pushes)
@@ -170,5 +170,18 @@ namespace AnkaPTT.ViewModels
             }
         }
 
+        public event EventHandler<PushClickedEventArgs> PushDoubleClicked;
+
+        public void OnPushDoubleClicked(PushViewModel push) => PushDoubleClicked?.Invoke(this, new PushClickedEventArgs(push));
+
+    }
+
+    class PushClickedEventArgs : EventArgs
+    {
+        public PushViewModel Push { get; set; }
+        public PushClickedEventArgs(PushViewModel push)
+        {
+            Push = push;
+        }
     }
 }

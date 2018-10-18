@@ -19,6 +19,8 @@ namespace AnkaPTT.ViewModels
             set
             {
                 _dispatcher = value;
+                FilterViewModel.FilteredPushCollection.Dispatcher = value;
+
                 ViewPushCollection.Dispatcher = value;
             }
         }
@@ -32,22 +34,22 @@ namespace AnkaPTT.ViewModels
 
         public MainViewModel()
         {
-            FilterViewModel.AllPushCollection = this.AllPushCollection;
-            FilterViewModel.FilteredPushCollection.CollectionChanged +=
-                (sender, e) =>
+            FilterViewModel.MonitorPushCollection = this.AllPushCollection;
+            FilterViewModel.PushDoubleClicked += (sender, e) => EvaluateScriptAsync($"selectPush({e.Push.Index})");
+    
+            FilterViewModel.FilteredPushCollection.CollectionChanged += (sender, e) =>
                 {
-                    // UiThreadRunSync(() => ViewPushCollection.ResetTo(FilterViewModel.FilteredPushCollection));
-                    ViewPushCollection.ResetTo(FilterViewModel.FilteredPushCollection);
-                    if (FilterViewModel.HighlightResults)
-                    {
-                        WebBrowser.GetMainFrame().EvaluateScriptAsync($"highlight([{string.Join(",", ViewPushCollection.Select(p => p.Index))}])");
-                    }
-                    else
-                    {
-                        WebBrowser.GetMainFrame().EvaluateScriptAsync($"highlight([])");
-                    }
+                    IEnumerable<PushViewModel> list = (IEnumerable<PushViewModel>)sender;
+                    string param = FilterViewModel.HighlightResults ? string.Join(",", list.Select(p => p.Index)) : "";
+                    EvaluateScriptAsync($"highlight([{param}])");
                 };
         }
+
+        private Task<JavascriptResponse> EvaluateScriptAsync(string script)
+        {
+            return WebBrowser?.GetMainFrame()?.EvaluateScriptAsync(script);
+        }
+
 
         internal void UpdatePushes(List<Push> pushes)
         {

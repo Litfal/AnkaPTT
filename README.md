@@ -40,3 +40,5 @@ AnkaPTT is using CefSharp (https://github.com/cefsharp/CefSharp) for webbrowser.
 * 篩選器設定檔
 
 * 分離一些混在 ViewModel 裡面的業務邏輯程式碼 (不過我有點懶)
+
+* 調整[自動重新載入]功能與更新推文方式的模式
