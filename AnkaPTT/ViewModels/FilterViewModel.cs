@@ -95,34 +95,39 @@ namespace AnkaPTT.ViewModels
         {
             if (_mainViewModel != null) throw new Exception("SetMainViewModel only can be called once.");
             _mainViewModel = mainViewModel;
-            MonitorPushCollection = _mainViewModel.AllPushCollection;
             FilteredPushCollection.Dispatcher = _mainViewModel.Dispatcher;
+            MonitorPushCollection = _mainViewModel.AllPushCollection;
         }
 
         internal void Dispose()
         {
             MonitorPushCollection = null;
-         
             _mainViewModel.ReleseFilter(this);
         }
 
         private void MonitorPushCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            applyFilter();
+            ApplyFilterAsync();
         }
 
         public override void OnPropertyChanged(string propertyName)
         {
             base.OnPropertyChanged(propertyName);
-            applyFilter();
+            ApplyFilterAsync();
         }
 
-        void applyFilter()
+        Task ApplyFilterAsync()
         {
-            FilteredPushCollection.ResetTo(ApplyFilter(MonitorPushCollection));
+            return ApplyFilterAsync(MonitorPushCollection)
+                .ContinueWith((r) => FilteredPushCollection.ResetTo(r.Result));
         }
 
-        public IEnumerable<PushViewModel> ApplyFilter(IEnumerable<PushViewModel> pushes)
+        private Task<IEnumerable<PushViewModel>> ApplyFilterAsync(IEnumerable<PushViewModel> pushes)
+        {
+            return Task.Run(() => ApplyFilter(pushes));
+        }
+
+        private IEnumerable<PushViewModel> ApplyFilter(IEnumerable<PushViewModel> pushes)
         {
             if (!Enabled) return pushes;
 
