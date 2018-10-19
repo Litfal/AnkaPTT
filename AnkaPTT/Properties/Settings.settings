@@ -5,7 +5,13 @@
     <Setting Name="LoadPageMode" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">5</Value>
     </Setting>
-    <Setting Name="AutoRefreshMs" Type="System.Int32" Scope="User">
+    <Setting Name="AutoRefreshMs" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
+    <Setting Name="ReloadOnAutoFatalPushError" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="FetchPushInterval" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">10000</Value>
     </Setting>
   </Settings>

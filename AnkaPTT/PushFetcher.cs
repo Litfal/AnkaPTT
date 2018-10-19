@@ -14,7 +14,7 @@ namespace AnkaPTT
         string injectScript;
         object _lck = new object();
         CancellationTokenSource _cts;
-        int delayMs = 10000;
+        int delayMs = Properties.Settings.Default.FetchPushInterval;
 
         public event EventHandler<PushFetchedEventArgs> PushFetched;
 
@@ -40,10 +40,6 @@ namespace AnkaPTT
                         dynamic r = response.Result;
                         ct.ThrowIfCancellationRequested();
                         OnGotResponse(r);
-                        //bool? fatalError = r.fatalerror;
-                        //Push[] pushes = Push.MapByDynamicList(r.pushes as IEnumerable<dynamic>).ToArray();
-                        //System.Diagnostics.Debug.WriteLine(fatalError);
-                        //System.Diagnostics.Debug.WriteLine(pushes.Length);
                     }
                     Thread.Sleep(delayMs);
                 }

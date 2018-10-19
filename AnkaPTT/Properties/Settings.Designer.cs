@@ -32,15 +32,30 @@ namespace AnkaPTT.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10000")]
         public int AutoRefreshMs {
             get {
                 return ((int)(this["AutoRefreshMs"]));
             }
-            set {
-                this["AutoRefreshMs"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ReloadOnAutoFatalPushError {
+            get {
+                return ((bool)(this["ReloadOnAutoFatalPushError"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public int FetchPushInterval {
+            get {
+                return ((int)(this["FetchPushInterval"]));
             }
         }
     }

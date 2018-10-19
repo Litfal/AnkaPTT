@@ -26,7 +26,7 @@ namespace AnkaPTT
     {
         MainViewModel viewModel = new MainViewModel();
 
-        PushFetcher pushFetcher = new PushFetcher();
+        PushFetcher _pushFetcher = new PushFetcher();
 
         System.Timers.Timer _autoRefreshTimer = new System.Timers.Timer(Properties.Settings.Default.AutoRefreshMs);
 
@@ -38,7 +38,7 @@ namespace AnkaPTT
             viewModel.Dispatcher = Dispatcher;
             viewModel.WebBrowser = wb_main;
             DataContext = viewModel;
-            pushFetcher.PushFetched += PushFetcher_PushFetched;
+            _pushFetcher.PushFetched += PushFetcher_PushFetched;
             Title = $"AnkaPTT {GetType().Assembly.GetName().Version}";
 
             _loadPageMode = (LoadPageModes)Properties.Settings.Default.LoadPageMode;
@@ -50,6 +50,7 @@ namespace AnkaPTT
         protected override void OnClosing(CancelEventArgs e)
         {
             _autoRefreshTimer.Dispose();
+            _pushFetcher.Stop();
             // close others filter window
             foreach (Window win in App.Current.Windows)
             {
@@ -64,7 +65,7 @@ namespace AnkaPTT
             {
                 viewModel.UpdatePushes(e.Pushes);
             }
-            else if (e.FatalError == true)
+            else if (e.FatalError == true && Properties.Settings.Default.ReloadOnAutoFatalPushError)
             {
                 Reload(true);
             }
@@ -85,14 +86,14 @@ namespace AnkaPTT
 
         private void wb_main_FrameLoadEnd(object sender, CefSharp.FrameLoadEndEventArgs e)
         {
-            if (e.Frame.IsMain) pushFetcher.Start(e.Browser);
+            if (e.Frame.IsMain) _pushFetcher.Start(e.Browser);
         }
 
         private void wb_main_FrameLoadStart(object sender, CefSharp.FrameLoadStartEventArgs e)
         {
             if (e.Frame.IsMain)
             {
-                pushFetcher.Stop();
+                _pushFetcher.Stop();
                 UiThreadRunSync(viewModel.AllPushCollection.Clear);
             }
 
