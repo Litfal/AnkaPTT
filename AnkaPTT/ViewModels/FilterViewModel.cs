@@ -193,8 +193,7 @@ namespace AnkaPTT.ViewModels
                 enumerable = TakeCount > 0 ? enumerable.Take(TakeCount) : enumerable;
 
             if (ReverseView) enumerable = enumerable.Reverse();
-
-            return enumerable;
+            return enumerable.ToList();
         }
 
         static IEnumerable<PushViewModel> stepEnumerate(IEnumerable<PushViewModel> query, int step)
