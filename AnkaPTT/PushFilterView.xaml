@@ -170,7 +170,7 @@
                     </WrapPanel>
                     <WrapPanel Margin="0,0,8,0">
                         <CheckBox IsChecked="{Binding EnableContainsText, Mode=TwoWay}">包含下列文字</CheckBox>
-                        <TextBox MinWidth="30" Text="{Binding ContainsText}" />
+                        <TextBox MinWidth="30" Text="{Binding ContainsText}" PreviewKeyUp="ContainsText_PreviewKeyUp" />
                     </WrapPanel>
                 </WrapPanel>
                 <WrapPanel Margin="5">

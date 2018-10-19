@@ -21,14 +21,9 @@ namespace AnkaPTT
     /// </summary>
     public partial class PushFilterView : UserControl
     {
-        //FilterViewModel filterViewModel = new FilterViewModel();
-        FilterViewModel filterViewModel;
-
         public PushFilterView()
         {
             InitializeComponent();
-            //filterViewModel.FilteredPushCollection.Dispatcher = Dispatcher;
-            //this.DataContext = filterViewModel;
         }
 
         private FilterViewModel GetFilterViewModel()
@@ -48,5 +43,16 @@ namespace AnkaPTT
             }
         }
 
+        private void ContainsText_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                BindingExpression be = ((TextBox)sender).GetBindingExpression(TextBox.TextProperty);
+                if (be != null)
+                {
+                    be.UpdateSource();
+                }
+            }
+        }
     }
 }
