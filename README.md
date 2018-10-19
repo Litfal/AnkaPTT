@@ -49,12 +49,12 @@ AnkaPTT is using CefSharp (https://github.com/cefsharp/CefSharp) for webbrowser.
 
 ## Todo list:
 
-* 全域設定檔
+- [ ] 全域設定檔
 
-* 篩選器設定檔
+- [ ] 篩選器設定檔
 
-* 分離一些混在 ViewModel 裡面的業務邏輯程式碼 (不過我有點懶)
+- [ ] 分離一些混在 ViewModel 裡面的業務邏輯程式碼 (不過我有點懶)
 
-* 調整[自動重新載入]功能與更新推文方式的模式
+- [ ] 調整*自動重新載入*功能與更新推文方式的模式
 
-* MainViewModel - FilterViewModel - FilterView 這邊的關係寫法很醜，希望能重構
+- [ ] MainViewModel - FilterViewModel - FilterView 這邊的關係寫法很醜，希望能重構
