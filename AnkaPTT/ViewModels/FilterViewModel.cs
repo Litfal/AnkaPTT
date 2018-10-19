@@ -136,9 +136,10 @@ namespace AnkaPTT.ViewModels
 
             if (EnableContainsText)
             {
-                string containsText = ContainsText.Trim();
+                string containsText = ContainsText;
+                var compareInfo = System.Globalization.CultureInfo.GetCultureInfo("zh-TW").CompareInfo;
                 if (containsText.Length > 0)
-                    query = query.Where(p => p.Content.Contains(containsText));
+                    query = query.Where(p => compareInfo.IndexOf(p.Content, containsText, System.Globalization.CompareOptions.IgnoreCase) >= 0);
             }
 
             // Tag filter
