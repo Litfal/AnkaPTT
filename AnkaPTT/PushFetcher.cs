@@ -46,6 +46,17 @@ namespace AnkaPTT
             });
         }
 
+
+        internal void FetchOnce(IBrowser browser)
+        {
+            var response = browser.MainFrame.EvaluateScriptAsync("fetch();").Result;
+            if (response.Success && response.Result != null)
+            {
+                dynamic r = response.Result;
+                OnGotResponse(r);
+            }
+        }
+
         private void OnGotResponse(dynamic result)
         {
             bool? fatalError = result.fatalerror;

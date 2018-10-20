@@ -44,7 +44,8 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" x:Name="txt_url" KeyUp="txt_url_KeyUp" HorizontalAlignment="Stretch" >
-                https://www.ptt.cc/bbs/C_Chat/M.1539521892.A.1C4.html
+                https://www.ptt.cc/bbs/Test/M.1540027482.A.BCB.html
+                <!--https://www.ptt.cc/bbs/C_Chat/M.1539521892.A.1C4.html-->
             </TextBox>
             <Button Grid.Column="1" Margin="3,0,0,0" Click="Refresh_Click" >　→　</Button>
             <ToggleButton Grid.Column="2" Margin="3,0,0,0" Checked="AutoRefresh_Checked" Unchecked="AutoRefresh_Unchecked">自動重新載入</ToggleButton>

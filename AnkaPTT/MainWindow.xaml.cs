@@ -152,6 +152,9 @@ namespace AnkaPTT
         static System.Text.RegularExpressions.Regex _pollurlRegex = 
             new System.Text.RegularExpressions.Regex("data-pollurl=\"(?<pollurl>[^\"]+)\"", System.Text.RegularExpressions.RegexOptions.Compiled);
 
+        string cacheKey;
+        int offset;
+
         private void compareAndLoadHtml(string html, string url, bool force = false)
         {
             string newCheckData = string.Empty;
@@ -180,9 +183,58 @@ namespace AnkaPTT
 
             if(alwaysLoad || newCheckData != _checkData)
             {
-                UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
-                _checkData = newCheckData;
+                LoadHtmlAsync(html, url, newCheckData, force);
+
             }
+        }
+
+        private Task LoadHtmlAsync(string html, string url, string newCheckData, bool force)
+        {
+            return Task.Run(()=> LoadHtml(html, url, newCheckData, force));
+        }
+
+        private void LoadHtml(string html, string url, string newCheckData, bool force)
+        {
+            _checkData = newCheckData;
+            if (_loadPageMode.HasFlag(LoadPageModes.ComparePollurl))
+            {
+                try
+                {
+                    // parse pollurl 
+                    int questionIdx = newCheckData.IndexOf("?");
+                    if (questionIdx >= 0 && newCheckData.Length > questionIdx)
+                    {
+                        string query = newCheckData.Substring(questionIdx + 1);
+                        var queries = System.Web.HttpUtility.ParseQueryString(System.Web.HttpUtility.HtmlDecode(query));
+                        // set offset & cacheKey
+                        int newOffset = int.Parse(queries["offset"]);
+                        string newCacheKey = queries["cacheKey"];
+                        if (force || cacheKey != newCacheKey) // cacheKey is changed after edited
+                            UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
+                        else if (offset != newOffset)
+                            UpdateHtml(html);
+                        offset = newOffset;
+                        cacheKey = newCacheKey;
+                    }
+                }
+                catch 
+                {
+                    UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
+                }
+            }
+            else
+                UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
+        }
+
+        private void UpdateHtml(string html)
+        {
+            HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
+            document.LoadHtml(html);
+            var mainNode = document.DocumentNode.SelectSingleNode("//div[@id='main-container']");
+            // covert to base64
+            string encoded = System.Web.HttpUtility.JavaScriptStringEncode(mainNode.InnerHtml.Trim());
+            wb_main.GetMainFrame().EvaluateScriptAsync($"updateMainContent('{encoded}')");
+            _pushFetcher.FetchOnce(wb_main.GetBrowser());
         }
 
         /// <summary>
