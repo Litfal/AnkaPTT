@@ -184,7 +184,7 @@ namespace AnkaPTT
 
             if(alwaysLoad || newCheckData != _checkData)
             {
-                LoadHtmlAsync(html, url, newCheckData, false);
+                LoadHtmlAsync(html, url, newCheckData, force);
 
             }
         }
@@ -210,11 +210,16 @@ namespace AnkaPTT
                         var queries = System.Web.HttpUtility.ParseQueryString(System.Web.HttpUtility.HtmlDecode(query));
                         // set offset & cacheKey
                         int newOffset = int.Parse(queries["offset"]);
+                        System.Diagnostics.Debug.WriteLine(newOffset);
                         string newCacheKey = queries["cacheKey"];
                         if (force || cacheKey != newCacheKey) // cacheKey is changed after edited
                             UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
-                        //else if (offset != newOffset)
-                            UpdateHtml(html);
+
+                        else if (offset != newOffset)
+                        {
+                            // guest new push = (newOffset - offset) / 102
+                            AddPushes(html, (newOffset - offset) / 102);
+                        }
                         offset = newOffset;
                         cacheKey = newCacheKey;
                     }
@@ -228,33 +233,35 @@ namespace AnkaPTT
                 UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
         }
 
-        private void UpdateHtml(string html)
+        private void AddPushes(string html, int newPushCount)
         {
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(html);
+            DecodeDocument_cfEmail(document);
 
-            //var pushNodes = document.DocumentNode.SelectNodes("//div[@class='push']");
-            //// to parameter
-            //StringBuilder prarmeter = new StringBuilder("[");
-            //foreach (var node in pushNodes)
-            //{
-            //    prarmeter.Append("'");
-            //    prarmeter.Append(System.Web.HttpUtility.JavaScriptStringEncode(node.OuterHtml.Trim()));
-            //    prarmeter.Append("',");
-            //}
-            //if (prarmeter.Length > 1) prarmeter[prarmeter.Length - 1] = ']';
-            //wb_main.GetMainFrame().EvaluateScriptAsync($"updatePushes({prarmeter})");
-            // var test = cfDecodeEmail("<a href=\"/cdn-cgi/l/email-protection\" class=\"__cf_email__\" data-cfemail=\"c39797979783\">[email&#160;protected]</a>");
+            var pushNodes = document.DocumentNode.SelectNodes("//div[contains(@class, 'push')]");
+            StringBuilder prarmeter = new StringBuilder("[");
+            for (int i = pushNodes.Count - newPushCount; i < pushNodes.Count; i++)
+            {
+                var node = pushNodes[i];
+                prarmeter.Append("'");
+                prarmeter.Append(System.Web.HttpUtility.JavaScriptStringEncode(node.OuterHtml.Trim()));
+                prarmeter.Append("',");
+            }
+            if (prarmeter.Length > 1) prarmeter[prarmeter.Length - 1] = ']';
+            wb_main.GetMainFrame().EvaluateScriptAsync($"addPushes({prarmeter})");
 
-            Decode_cfEmailInDocument(document);
-            var mainNode = document.DocumentNode.SelectSingleNode("//div[@id='main-container']");
+            #region *OLD* update whole page
+            //var mainNode = document.DocumentNode.SelectSingleNode("//div[@id='main-container']");
             // covert to base64
-            string encoded = System.Web.HttpUtility.JavaScriptStringEncode(mainNode.InnerHtml.Trim());
-            wb_main.GetMainFrame().EvaluateScriptAsync($"updateMainContent('{encoded}')");
+            //string encoded = System.Web.HttpUtility.JavaScriptStringEncode(mainNode.InnerHtml.Trim());
+            //wb_main.GetMainFrame().EvaluateScriptAsync($"updateMainContent('{encoded}')");
+            #endregion
+
             _pushFetcher.FetchOnce(wb_main.GetBrowser());
         }
 
-        private void Decode_cfEmailInDocument(HtmlDocument document)
+        private void DecodeDocument_cfEmail(HtmlDocument document)
         {
             var encodeEmailNodes = document.DocumentNode.SelectNodes("//a[@class='__cf_email__']");
             for (int i = 0; i < encodeEmailNodes.Count; i++)

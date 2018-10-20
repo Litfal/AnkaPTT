@@ -44,8 +44,8 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" x:Name="txt_url" KeyUp="txt_url_KeyUp" HorizontalAlignment="Stretch" >
-                https://www.ptt.cc/bbs/Test/M.1540027482.A.BCB.html
-                <!--https://www.ptt.cc/bbs/C_Chat/M.1540041619.A.6C0.html-->
+                <!--https://www.ptt.cc/bbs/Test/M.1540027482.A.BCB.html-->
+                https://www.ptt.cc/bbs/C_Chat/M.1540041619.A.6C0.html
                 <!--https://www.ptt.cc/bbs/Test/M.1540027482.A.BCB.html-->
                 <!--https://www.ptt.cc/bbs/C_Chat/M.1539521892.A.1C4.html-->
             </TextBox>
