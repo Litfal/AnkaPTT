@@ -5,7 +5,9 @@ AnkaPTT is a tool that help people playing 安価 on PTT. It parses PTT post to 
 
 AnkaPTT is built in .NET framework 4.5.2 in C#.
 
-AnkaPTT is using CefSharp (https://github.com/cefsharp/CefSharp) for webbrowser.
+AnkaPTT is using [CefSharp](https://github.com/cefsharp/CefSharp) for webbrowser.
+
+AnkaPTT is using [Html Agility Pack](https://github.com/zzzprojects/html-agility-pack) to parse HTML.
 
 ## How to use
 
