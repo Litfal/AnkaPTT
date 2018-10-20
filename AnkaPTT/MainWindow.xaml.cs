@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using AnkaPTT.ViewModels;
 using CefSharp;
+using HtmlAgilityPack;
 
 namespace AnkaPTT
 {
@@ -183,10 +184,11 @@ namespace AnkaPTT
 
             if(alwaysLoad || newCheckData != _checkData)
             {
-                LoadHtmlAsync(html, url, newCheckData, force);
+                LoadHtmlAsync(html, url, newCheckData, false);
 
             }
         }
+
 
         private Task LoadHtmlAsync(string html, string url, string newCheckData, bool force)
         {
@@ -211,13 +213,13 @@ namespace AnkaPTT
                         string newCacheKey = queries["cacheKey"];
                         if (force || cacheKey != newCacheKey) // cacheKey is changed after edited
                             UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
-                        else if (offset != newOffset)
+                        //else if (offset != newOffset)
                             UpdateHtml(html);
                         offset = newOffset;
                         cacheKey = newCacheKey;
                     }
                 }
-                catch 
+                catch (Exception ex)
                 {
                     UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
                 }
@@ -228,14 +230,57 @@ namespace AnkaPTT
 
         private void UpdateHtml(string html)
         {
-            HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
+            HtmlDocument document = new HtmlDocument();
             document.LoadHtml(html);
+
+            //var pushNodes = document.DocumentNode.SelectNodes("//div[@class='push']");
+            //// to parameter
+            //StringBuilder prarmeter = new StringBuilder("[");
+            //foreach (var node in pushNodes)
+            //{
+            //    prarmeter.Append("'");
+            //    prarmeter.Append(System.Web.HttpUtility.JavaScriptStringEncode(node.OuterHtml.Trim()));
+            //    prarmeter.Append("',");
+            //}
+            //if (prarmeter.Length > 1) prarmeter[prarmeter.Length - 1] = ']';
+            //wb_main.GetMainFrame().EvaluateScriptAsync($"updatePushes({prarmeter})");
+            // var test = cfDecodeEmail("<a href=\"/cdn-cgi/l/email-protection\" class=\"__cf_email__\" data-cfemail=\"c39797979783\">[email&#160;protected]</a>");
+
+            Decode_cfEmailInDocument(document);
             var mainNode = document.DocumentNode.SelectSingleNode("//div[@id='main-container']");
             // covert to base64
             string encoded = System.Web.HttpUtility.JavaScriptStringEncode(mainNode.InnerHtml.Trim());
             wb_main.GetMainFrame().EvaluateScriptAsync($"updateMainContent('{encoded}')");
             _pushFetcher.FetchOnce(wb_main.GetBrowser());
         }
+
+        private void Decode_cfEmailInDocument(HtmlDocument document)
+        {
+            var encodeEmailNodes = document.DocumentNode.SelectNodes("//a[@class='__cf_email__']");
+            for (int i = 0; i < encodeEmailNodes.Count; i++)
+            {
+                var node = encodeEmailNodes[i];
+                var cfemail = node.GetAttributeValue("data-cfemail", "");
+                var decoded = Decode_cfEmail(cfemail);
+                var newNode = HtmlNode.CreateNode(decoded);
+                node.ParentNode.ReplaceChild(newNode, node);
+            }
+        }
+
+        public static string Decode_cfEmail(string encodedString)
+        {
+            StringBuilder email = new StringBuilder();
+            int r = Convert.ToInt32(encodedString.Substring(0, 2), 16), n, i;
+            for (n = 2; encodedString.Length - n > 0; n += 2)
+            {
+                i = Convert.ToInt32(encodedString.Substring(n, 2), 16) ^ r;
+                char character = (char)i;
+                email.Append(Convert.ToString(character));
+            }
+
+            return email.ToString();
+        }
+
 
         /// <summary>
         /// Runs the specific Action on the Dispatcher in an async fashion
