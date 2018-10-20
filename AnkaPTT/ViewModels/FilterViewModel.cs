@@ -177,10 +177,12 @@ namespace AnkaPTT.ViewModels
                 foreach (var p in enumerable)
                 {
                     List<PushViewModel> list;
-                    if (!dic_of_content.TryGetValue(p.Content, out list))
+                    string compareContent = string.Join(" ", p.Content.Split(new char[] { ' ', '　', '\t' }, StringSplitOptions.RemoveEmptyEntries));
+                    // string compareContent = p.Content;
+                    if (!dic_of_content.TryGetValue(compareContent, out list))
                     {
                         list = new List<PushViewModel>();
-                        dic_of_content[p.Content] = list;
+                        dic_of_content[compareContent] = list;
                     }
                     list.Add(p);
                     if (list.Count == SameTimes)
