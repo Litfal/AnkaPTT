@@ -33,12 +33,14 @@ namespace AnkaPTT
                 browser.MainFrame.EvaluateScriptAsync(injectScript + "clickToggleAuto();").Wait();
                 while (true)
                 {
-                    ct.ThrowIfCancellationRequested();
+                    //ct.ThrowIfCancellationRequested();
+                    if (ct.IsCancellationRequested) return;
                     var response = browser.MainFrame.EvaluateScriptAsync("fetch();").Result;
                     if (response.Success && response.Result != null)
                     {
                         dynamic r = response.Result;
-                        ct.ThrowIfCancellationRequested();
+                        // ct.ThrowIfCancellationRequested();
+                        if (ct.IsCancellationRequested) return;
                         OnGotResponse(r);
                     }
                     Thread.Sleep(delayMs);
