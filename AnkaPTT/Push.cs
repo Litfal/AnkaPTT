@@ -42,11 +42,9 @@ namespace AnkaPTT
                 try
                 {
                     p = MapByDynamic(item);
-
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
                 if (p != null) yield return p;
@@ -56,7 +54,6 @@ namespace AnkaPTT
         public override string ToString()
         {
             return $"{index}F\t{ipdatetime}\t{tag}{userid}: {content}";
-            // return base.ToString();
         }
     }
 }

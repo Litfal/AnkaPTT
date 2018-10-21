@@ -48,10 +48,7 @@ namespace AnkaPTT
             if (e.Key == Key.Enter)
             {
                 BindingExpression be = ((TextBox)sender).GetBindingExpression(TextBox.TextProperty);
-                if (be != null)
-                {
-                    be.UpdateSource();
-                }
+                be?.UpdateSource();
             }
         }
     }
