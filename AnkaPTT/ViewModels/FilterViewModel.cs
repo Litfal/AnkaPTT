@@ -188,8 +188,7 @@ namespace AnkaPTT.ViewModels
                     if (list.Count == SameTimes)
                         listofListMoreThanSameTimes.Add(list);
                 }
-
-                enumerable = listofListMoreThanSameTimes.SelectMany(list => list);
+                enumerable = (TakeCount > 0 ? listofListMoreThanSameTimes.Take(TakeCount): listofListMoreThanSameTimes).SelectMany(list => list);
             }
             else
                 enumerable = TakeCount > 0 ? enumerable.Take(TakeCount) : enumerable;
