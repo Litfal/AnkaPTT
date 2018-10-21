@@ -78,7 +78,7 @@ function updateMainContent(encodedHtml) {
 
 function addPushes(pushes) {
     for (var i = 0; i < pushes.length; i++) {
-        $('#main-content').append(unescape(pushes[i]));
+        $('#main-content').append($(unescape(pushes[i])).addClass('new-push'));
     }
 }
 

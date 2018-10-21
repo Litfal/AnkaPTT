@@ -213,11 +213,14 @@ namespace AnkaPTT
                         System.Diagnostics.Debug.WriteLine(newOffset);
                         string newCacheKey = queries["cacheKey"];
                         if (force || cacheKey != newCacheKey) // cacheKey is changed after edited
+                        {
+                            System.Diagnostics.Debug.WriteLine("LoadHtml full page");
                             UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
-
+                        }
                         else if (offset != newOffset)
                         {
                             // guest new push = (newOffset - offset) / 102
+                            System.Diagnostics.Debug.WriteLine("Add Pushes");
                             AddPushes(html, (newOffset - offset) / 102);
                         }
                         offset = newOffset;
