@@ -77,8 +77,15 @@ function updateMainContent(encodedHtml) {
 }
 
 function addPushes(pushes) {
+    var bottom = (document.body.clientHeight - window.innerHeight) - $(window).scrollTop();
     for (var i = 0; i < pushes.length; i++) {
         $('#main-content').append($(unescape(pushes[i])).addClass('new-push'));
+    }
+    if (bottom <= 50) {
+        // auto scroll when it was almost at bottom originally
+        $([document.documentElement, document.body]).animate({
+            scrollTop: (document.body.clientHeight - window.innerHeight) - bottom
+        }, 500);
     }
 }
 
