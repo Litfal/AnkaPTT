@@ -38,6 +38,7 @@ namespace AnkaPTT
         public MainWindow()
         {
             InitializeComponent();
+            wb_main.MenuHandler = new CustomMenuHandler();
             viewModel.Dispatcher = Dispatcher;
             viewModel.WebBrowser = wb_main;
             DataContext = viewModel;
