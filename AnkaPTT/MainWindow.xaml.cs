@@ -135,7 +135,7 @@ namespace AnkaPTT
                 wb_main.Load(url);
             else
             {
-                string html;
+                string html = null;
                 var cookieContainer = new CookieContainer();
                 // cookieContainer.Add(new System.Net.Cookie("over18", "1", "/", "www.ptt.cc"));
                 // it's work but I want to do a question message
@@ -146,7 +146,15 @@ namespace AnkaPTT
                     try
                     {
                         var result = await httpClient.GetAsync(url);
-                        html = await result.Content.ReadAsStringAsync();
+                        //result.Content.Headers.ContentType.MediaType
+                        if (result.IsSuccessStatusCode &&
+                            StringComparer.CurrentCultureIgnoreCase.Equals(
+                            "text/html", result.Content.Headers.ContentType))
+                        {
+                            html = await result.Content.ReadAsStringAsync();
+                        }
+                        else LoadUrl(url);
+
                         // html = await httpClient.GetStringAsync(url);
                     }
                     catch (Exception)
@@ -154,7 +162,8 @@ namespace AnkaPTT
                         return;
                     }
                 }
-                compareAndLoadHtml(html, url, force);
+                if (html != null)
+                    compareAndLoadHtml(html, url, force);
             }
         }
 
@@ -249,6 +258,9 @@ namespace AnkaPTT
 
         private void LoadWholeHtml(string html, string url)
             => UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
+
+        private void LoadUrl(string url)
+            => UiThreadRunAsync(() => wb_main.Load(url));
 
         private void AddPushes(string html, int newPushCount)
         {
