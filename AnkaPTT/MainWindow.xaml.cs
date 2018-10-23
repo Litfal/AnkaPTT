@@ -17,6 +17,8 @@ using System.Windows.Threading;
 using AnkaPTT.ViewModels;
 using CefSharp;
 using HtmlAgilityPack;
+using System.Net;
+using System.Net.Http;
 
 namespace AnkaPTT
 {
@@ -133,19 +135,26 @@ namespace AnkaPTT
                 wb_main.Load(url);
             else
             {
-                using (System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient())
+                string html;
+                var cookieContainer = new CookieContainer();
+                // cookieContainer.Add(new System.Net.Cookie("over18", "1", "/", "www.ptt.cc"));
+                // it's work but I want to do a question message
+                // MessageBox.Show("", "", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                var clienthandler = new HttpClientHandler { AllowAutoRedirect = true, UseCookies = true, CookieContainer = cookieContainer };
+                using (HttpClient httpClient = new HttpClient(clienthandler))
                 {
-                    string html;
                     try
                     {
-                        html = await httpClient.GetStringAsync(url);
+                        var result = await httpClient.GetAsync(url);
+                        html = await result.Content.ReadAsStringAsync();
+                        // html = await httpClient.GetStringAsync(url);
                     }
                     catch (Exception)
                     {
                         return;
                     }
-                    compareAndLoadHtml(html, url, force);
                 }
+                compareAndLoadHtml(html, url, force);
             }
         }
 
