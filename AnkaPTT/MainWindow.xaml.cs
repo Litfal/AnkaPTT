@@ -215,7 +215,7 @@ namespace AnkaPTT
                         if (force || cacheKey != newCacheKey) // cacheKey is changed after edited
                         {
                             System.Diagnostics.Debug.WriteLine("LoadHtml full page");
-                            UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
+                            LoadWholeHtml(html, url);
                         }
                         else if (offset != newOffset)
                         {
@@ -226,15 +226,20 @@ namespace AnkaPTT
                         offset = newOffset;
                         cacheKey = newCacheKey;
                     }
+                    else
+                        LoadWholeHtml(html, url);
                 }
                 catch (Exception ex)
                 {
-                    UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
+                    LoadWholeHtml(html, url);
                 }
             }
             else
-                UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
+                LoadWholeHtml(html, url);
         }
+
+        private void LoadWholeHtml(string html, string url)
+            => UiThreadRunAsync(() => wb_main.LoadHtml(html, url));
 
         private void AddPushes(string html, int newPushCount)
         {
