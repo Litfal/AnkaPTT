@@ -243,16 +243,19 @@ namespace AnkaPTT
             DecodeDocument_cfEmail(document);
 
             var pushNodes = document.DocumentNode.SelectNodes("//div[contains(@class, 'push')]");
-            StringBuilder prarmeter = new StringBuilder("[");
-            for (int i = pushNodes.Count - newPushCount; i < pushNodes.Count; i++)
+            if (pushNodes != null)
             {
-                var node = pushNodes[i];
-                prarmeter.Append("'");
-                prarmeter.Append(System.Web.HttpUtility.JavaScriptStringEncode(node.OuterHtml.Trim()));
-                prarmeter.Append("',");
+                StringBuilder prarmeter = new StringBuilder("[");
+                for (int i = pushNodes.Count - newPushCount; i < pushNodes.Count; i++)
+                {
+                    var node = pushNodes[i];
+                    prarmeter.Append("'");
+                    prarmeter.Append(System.Web.HttpUtility.JavaScriptStringEncode(node.OuterHtml.Trim()));
+                    prarmeter.Append("',");
+                }
+                if (prarmeter.Length > 1) prarmeter[prarmeter.Length - 1] = ']';
+                wb_main.GetMainFrame().EvaluateScriptAsync($"addPushes({prarmeter})");
             }
-            if (prarmeter.Length > 1) prarmeter[prarmeter.Length - 1] = ']';
-            wb_main.GetMainFrame().EvaluateScriptAsync($"addPushes({prarmeter})");
 
             #region *OLD* update whole page
             //var mainNode = document.DocumentNode.SelectSingleNode("//div[@id='main-container']");
@@ -267,6 +270,7 @@ namespace AnkaPTT
         private void DecodeDocument_cfEmail(HtmlDocument document)
         {
             var encodeEmailNodes = document.DocumentNode.SelectNodes("//a[@class='__cf_email__']");
+            if (encodeEmailNodes == null) return;
             for (int i = 0; i < encodeEmailNodes.Count; i++)
             {
                 var node = encodeEmailNodes[i];
