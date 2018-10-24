@@ -149,8 +149,8 @@ namespace AnkaPTT
                         var result = await httpClient.GetAsync(url);
                         //result.Content.Headers.ContentType.MediaType
                         if (result.IsSuccessStatusCode &&
-                            StringComparer.CurrentCultureIgnoreCase.Equals(
-                            "text/html", result.Content.Headers.ContentType))
+                            System.Globalization.CompareInfo.GetCompareInfo("zh-TW")
+                            .IndexOf(result.Content.Headers.ContentType.MediaType, "htm", System.Globalization.CompareOptions.IgnoreCase) >= 0)
                         {
                             html = await result.Content.ReadAsStringAsync();
                         }
@@ -278,6 +278,12 @@ namespace AnkaPTT
                     var node = pushNodes[i];
                     prarmeter.Append("'");
                     prarmeter.Append(System.Web.HttpUtility.JavaScriptStringEncode(node.OuterHtml.Trim()));
+                    // check NextSibling is div.richcontent 
+                    // it's yes when push contains youtube, imgur or etc link
+                    // append the richcontent to push
+                    var nextNode = node.NextSibling;
+                    if (nextNode?.HasClass("richcontent") == true)
+                        prarmeter.Append(System.Web.HttpUtility.JavaScriptStringEncode(nextNode.OuterHtml.Trim()));
                     prarmeter.Append("',");
                 }
                 if (prarmeter.Length > 1) prarmeter[prarmeter.Length - 1] = ']';
